@@ -1,0 +1,192 @@
+/* Concepto: bitácora por años, como notas de versión.
+   Año fijo a la izquierda, proyectos a la derecha.
+   Para cambiar los colores, editá las variables de :root. */
+
+:root {
+  --bg: #f2f5f7;
+  --surface: #ffffff;
+  --fg: #13181d;
+  --muted: #56626d;
+  --line: #d5dce2;
+  --accent: #2446d6;
+  --accent-ink: #ffffff;
+  --tag-bg: #e4eaf0;
+  --warn-bg: #fff2cf;
+  --warn-fg: #664700;
+
+  --f-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+/* Modo oscuro automático, según la configuración del dispositivo */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1317;
+    --surface: #151c22;
+    --fg: #e7ecf0;
+    --muted: #97a4af;
+    --line: #27323b;
+    --accent: #8aa2ff;
+    --accent-ink: #0b1020;
+    --tag-bg: #1c262e;
+    --warn-bg: #2b2410;
+    --warn-fg: #f0d58a;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1rem/1.6 var(--f-body);
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 4rem max(16px, env(safe-area-inset-left, 0px));
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 64rem; margin-inline: auto; }
+
+/* Barra superior */
+.topbar { padding-block: 1rem; }
+.mark {
+  font: 500 .8rem var(--f-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Presentación */
+.hero {
+  padding-block: 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.hero h1 {
+  font: 700 clamp(2.6rem, 9vw, 5rem)/1 var(--f-display);
+  letter-spacing: -.03em;
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.role {
+  font: 500 .85rem var(--f-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+.bio { max-width: 58ch; margin: 0; font-size: 1.125rem; }
+.stats { font: 400 .85rem var(--f-mono); color: var(--muted); margin: 0; }
+
+.btn {
+  font: 600 .9rem var(--f-body);
+  padding: .55rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.btn:hover { filter: brightness(1.08); }
+
+/* Línea de tiempo */
+.timeline { display: flex; flex-direction: column; }
+.year {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 1.25rem 2rem;
+  border-top: 1px solid var(--line);
+  padding-block: 2rem;
+}
+.year-label {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  min-width: 0;
+}
+.year-num {
+  font: 700 clamp(2rem, 5vw, 2.75rem)/1 var(--f-mono);
+  letter-spacing: -.04em;
+  margin: 0;
+}
+.year-count { font: 400 .8rem var(--f-mono); color: var(--muted); margin: 0; }
+
+/* Proyectos */
+.projects { display: flex; flex-direction: column; min-width: 0; }
+.project {
+  padding-block: 1.25rem;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  min-width: 0;
+}
+.project:first-child { border-top: 0; padding-top: 0; }
+.p-title {
+  font: 600 1.4rem/1.25 var(--f-display);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  overflow-wrap: anywhere;
+}
+.badge {
+  font: 500 .7rem var(--f-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  padding: .15rem .45rem;
+  border-radius: 4px;
+}
+.p-desc { margin: 0; max-width: 62ch; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; margin: 0; padding: 0; }
+.tag {
+  font: 500 .75rem var(--f-mono);
+  background: var(--tag-bg);
+  padding: .2rem .5rem;
+  border-radius: 4px;
+}
+.links { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.link {
+  font: 500 .85rem var(--f-mono);
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  overflow-wrap: anywhere;
+}
+.empty { color: var(--muted); margin: 0; }
+
+.footer {
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+  font: 400 .8rem var(--f-mono);
+  color: var(--muted);
+}
+
+/* Celulares */
+@media (max-width: 640px) {
+  .year { grid-template-columns: minmax(0, 1fr); }
+  .year-label {
+    position: static;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .75rem;
+  }
+  .hero { padding-block: 1.5rem 2rem; }
+}
